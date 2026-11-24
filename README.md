@@ -7,4 +7,16 @@ Salle :
 * Capacité max (en personne)
 * Date début réu
 * Date fin réu
-* Nb personne à la réu
+* Nb personne à la réunion
+
+# Aide 
+
+Installer Jest :
+```Bash
+npm install --save-dev jest
+```
+
+Lancer les tests : 
+```Bash
+npx jest
+```
