@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Réservation de salles</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@calendarjs/ce/dist/style.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/lemonadejs/dist/lemonade.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@calendarjs/ce/dist/index.min.js"></script>
+</head>
+<body>
+<main>
+    <header class="page-header">
+        <div>
+            <h1>Réservation de salles</h1>
+            <p class="muted">Consultez les réservations et réservez une salle disponible.</p>
+        </div>
+        <button id="new-room-button" type="button" class="secondary">+ Nouvelle salle</button>
+    </header>
+
+    <p id="status" role="status" aria-live="polite">Chargement des salles et des réservations…</p>
+
+    <div class="layout">
+        <section class="panel" aria-labelledby="calendar-title">
+            <h2 id="calendar-title">Disponibilités</h2>
+
+            <label for="room-filter">Salle à consulter</label>
+            <div class="room-line">
+                <select id="room-filter" disabled></select>
+                <button id="edit-room-button" type="button" class="link" disabled>Modifier</button>
+                <button id="delete-room-button" type="button" class="link danger" disabled>Supprimer</button>
+            </div>
+
+            <div id="calendar"></div>
+
+            <p class="legend"><span class="legend-dot"></span> Jour comportant au moins une réservation</p>
+
+            <h2 id="selected-date-title">Réservations du jour</h2>
+            <ul id="day-reservations"></ul>
+        </section>
+
+        <section class="panel" aria-labelledby="form-title">
+            <h2 id="form-title">Nouvelle réservation</h2>
+            <form id="reservation-form">
+                <label for="room">Salle</label>
+                <select id="room" name="idSalle" required disabled></select>
+
+                <label for="dateDebut">Date et heure de début</label>
+                <input id="dateDebut" name="dateDebut" type="datetime-local" required>
+
+                <label for="dateFin">Date et heure de fin</label>
+                <input id="dateFin" name="dateFin" type="datetime-local" required>
+
+                <label for="nbPersonnes">Nombre de personnes</label>
+                <input id="nbPersonnes" name="nbPersonnes" type="number" min="1" step="1" value="1" required>
+
+                <button id="submit-button" type="submit" disabled>Réserver</button>
+                <button id="cancel-edit-button" type="button" class="secondary" hidden>Abandonner la modification</button>
+            </form>
+        </section>
+    </div>
+</main>
+
+<!-- Popup de création et de modification d'une salle -->
+<dialog id="room-dialog">
+    <form id="room-form">
+        <h2 id="room-dialog-title">Nouvelle salle</h2>
+
+        <label for="room-name">Nom de la salle</label>
+        <input id="room-name" name="nom" type="text" required autocomplete="off" placeholder="Ex. : Salle Ada Lovelace">
+
+        <label for="room-capacity">Capacité maximale (personnes)</label>
+        <input id="room-capacity" name="capacite" type="number" min="1" step="1" value="10" required>
+
+        <div class="dialog-actions">
+            <button id="close-room-dialog" type="button" class="secondary">Annuler</button>
+            <button id="room-submit-button" type="submit">Créer la salle</button>
+        </div>
+    </form>
+</dialog>
+
+<script src="backend/class/salle.js"></script>
+<script src="backend/class/reservation.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
