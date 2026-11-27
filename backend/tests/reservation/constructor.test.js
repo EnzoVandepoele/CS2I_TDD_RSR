@@ -1,8 +1,8 @@
-const Reservation = require("../class/reservation");
+const Reservation = require("../../class/reservation");
 
 // ---------- id de la salle ----------
 
-test("idSalle_undefined_return_obligatoire", () => {
+test("reservation_idSalleUndefined_returnObligatoire", () => {
     // Arrange
     const idSalle = undefined;
     const expected = "L'id de la salle est obligatoire";
@@ -22,7 +22,7 @@ test("idSalle_undefined_return_obligatoire", () => {
 
 // ---------- format de la date ----------
 
-test("dateDebut_texte_return_format_invalide", () => {
+test("reservation_dateDebutTexte_returnFormatInvalide", () => {
     // Arrange
     const dateDebut = "pas une date";
     const expected = "Le format de la date est invalide";
@@ -40,7 +40,7 @@ test("dateDebut_texte_return_format_invalide", () => {
     expect(result).toBe(expected);
 });
 
-test("dateFin_texte_return_format_invalide", () => {
+test("reservation_dateFinTexte_returnFormatInvalide", () => {
     // Arrange
     const dateFin = "pas une date";
     const expected = "Le format de la date est invalide";
@@ -58,7 +58,7 @@ test("dateFin_texte_return_format_invalide", () => {
     expect(result).toBe(expected);
 });
 
-test("dateDebut_valide_return_date", () => {
+test("reservation_dateDebutValide_returnDate", () => {
     // Arrange
     const dateDebut = "2026-12-01T10:00";
     const expected = new Date("2026-12-01T10:00").getTime();
@@ -78,7 +78,7 @@ test("dateDebut_valide_return_date", () => {
 
 // ---------- ordre des dates ----------
 
-test("dateFin_avant_dateDebut_return_fin_apres_debut", () => {
+test("reservation_dateFinAvantDebut_returnFinApresDebut", () => {
     // Arrange
     const dateDebut = "2026-12-01T11:00";
     const dateFin = "2026-12-01T10:00";
@@ -97,7 +97,7 @@ test("dateFin_avant_dateDebut_return_fin_apres_debut", () => {
     expect(result).toBe(expected);
 });
 
-test("dateFin_egale_dateDebut_return_fin_apres_debut", () => {
+test("reservation_dateFinEgaleDebut_returnFinApresDebut", () => {
     // Arrange
     const dateDebut = "2026-12-01T10:00";
     const dateFin = "2026-12-01T10:00";
@@ -118,7 +118,7 @@ test("dateFin_egale_dateDebut_return_fin_apres_debut", () => {
 
 // ---------- nombre de personnes ----------
 
-test("nbPersonnes_0_return_superieur_a_0", () => {
+test("reservation_nbPersonnes0_returnSuperieurA0", () => {
     // Arrange
     const nbPersonnes = 0;
     const expected = "Le nombre de personnes doit être supérieur à 0";
@@ -136,7 +136,7 @@ test("nbPersonnes_0_return_superieur_a_0", () => {
     expect(result).toBe(expected);
 });
 
-test("nbPersonnes_-1_return_superieur_a_0", () => {
+test("reservation_nbPersonnesNegatif_returnSuperieurA0", () => {
     // Arrange
     const nbPersonnes = -1;
     const expected = "Le nombre de personnes doit être supérieur à 0";
@@ -154,7 +154,7 @@ test("nbPersonnes_-1_return_superieur_a_0", () => {
     expect(result).toBe(expected);
 });
 
-test("nbPersonnes_2.5_return_entier", () => {
+test("reservation_nbPersonnesDecimal_returnEntier", () => {
     // Arrange
     const nbPersonnes = 2.5;
     const expected = "Le nombre de personnes doit être un entier";
@@ -172,7 +172,7 @@ test("nbPersonnes_2.5_return_entier", () => {
     expect(result).toBe(expected);
 });
 
-test("nbPersonnes_texte_return_entier", () => {
+test("reservation_nbPersonnesTexte_returnEntier", () => {
     // Arrange
     const nbPersonnes = "cinq";
     const expected = "Le nombre de personnes doit être un entier";
@@ -190,7 +190,7 @@ test("nbPersonnes_texte_return_entier", () => {
     expect(result).toBe(expected);
 });
 
-test("nbPersonnes_5_return_5", () => {
+test("reservation_nbPersonnes5_return5", () => {
     // Arrange
     const nbPersonnes = 5;
     const expected = 5;

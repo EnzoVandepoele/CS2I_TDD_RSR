@@ -1,17 +1,16 @@
-const Salle = require("../class/salle");
+const Salle = require("../../class/salle");
 
 // ---------- id de la salle ----------
 
-test("id_undefined_return_obligatoire", () => {
+test("salle_sansId_returnIdNull", () => {
     // Arrange
-    const id = undefined;
-    const expected = "L'id de la salle est obligatoire";
+    const expected = null;
 
     // Act
     let result;
 
     try {
-        new Salle(id, "Salle A", 10);
+        result = new Salle("Salle A", 10).id;
     } catch (error) {
         result = error.message;
     }
@@ -20,7 +19,7 @@ test("id_undefined_return_obligatoire", () => {
     expect(result).toBe(expected);
 });
 
-test("id_1_return_1", () => {
+test("salle_id1_return1", () => {
     // Arrange
     const id = 1;
     const expected = 1;
@@ -29,7 +28,7 @@ test("id_1_return_1", () => {
     let result;
 
     try {
-        result = new Salle(id, "Salle A", 10).id;
+        result = new Salle("Salle A", 10, id).id;
     } catch (error) {
         result = error.message;
     }
@@ -40,7 +39,7 @@ test("id_1_return_1", () => {
 
 // ---------- nom de la salle ----------
 
-test("nom_vide_return_obligatoire", () => {
+test("salle_nomVide_returnObligatoire", () => {
     // Arrange
     const nom = "";
     const expected = "Le nom de la salle est obligatoire";
@@ -49,7 +48,7 @@ test("nom_vide_return_obligatoire", () => {
     let result;
 
     try {
-        new Salle(1, nom, 10);
+        new Salle(nom, 10, 1);
     } catch (error) {
         result = error.message;
     }
@@ -58,7 +57,7 @@ test("nom_vide_return_obligatoire", () => {
     expect(result).toBe(expected);
 });
 
-test("nom_espaces_return_obligatoire", () => {
+test("salle_nomEspaces_returnObligatoire", () => {
     // Arrange
     const nom = "   ";
     const expected = "Le nom de la salle est obligatoire";
@@ -67,7 +66,7 @@ test("nom_espaces_return_obligatoire", () => {
     let result;
 
     try {
-        new Salle(1, nom, 10);
+        new Salle(nom, 10, 1);
     } catch (error) {
         result = error.message;
     }
@@ -76,7 +75,7 @@ test("nom_espaces_return_obligatoire", () => {
     expect(result).toBe(expected);
 });
 
-test("nom_nombre_return_obligatoire", () => {
+test("salle_nomNombre_returnObligatoire", () => {
     // Arrange
     const nom = 42;
     const expected = "Le nom de la salle est obligatoire";
@@ -85,7 +84,7 @@ test("nom_nombre_return_obligatoire", () => {
     let result;
 
     try {
-        new Salle(1, nom, 10);
+        new Salle(nom, 10, 1);
     } catch (error) {
         result = error.message;
     }
@@ -94,7 +93,7 @@ test("nom_nombre_return_obligatoire", () => {
     expect(result).toBe(expected);
 });
 
-test("nom_Salle_A_return_Salle_A", () => {
+test("salle_nomSalleA_returnSalleA", () => {
     // Arrange
     const nom = "Salle A";
     const expected = "Salle A";
@@ -103,7 +102,7 @@ test("nom_Salle_A_return_Salle_A", () => {
     let result;
 
     try {
-        result = new Salle(1, nom, 10).nom;
+        result = new Salle(nom, 10, 1).nom;
     } catch (error) {
         result = error.message;
     }
@@ -114,7 +113,7 @@ test("nom_Salle_A_return_Salle_A", () => {
 
 // ---------- capacité ----------
 
-test("capacite_0_return_superieure_a_0", () => {
+test("salle_capacite0_returnSuperieureA0", () => {
     // Arrange
     const capacite = 0;
     const expected = "La capacité doit être supérieure à 0";
@@ -123,7 +122,7 @@ test("capacite_0_return_superieure_a_0", () => {
     let result;
 
     try {
-        new Salle(1, "Salle A", capacite);
+        new Salle("Salle A", capacite, 1);
     } catch (error) {
         result = error.message;
     }
@@ -132,7 +131,7 @@ test("capacite_0_return_superieure_a_0", () => {
     expect(result).toBe(expected);
 });
 
-test("capacite_-1_return_superieure_a_0", () => {
+test("salle_capaciteNegative_returnSuperieureA0", () => {
     // Arrange
     const capacite = -1;
     const expected = "La capacité doit être supérieure à 0";
@@ -141,7 +140,7 @@ test("capacite_-1_return_superieure_a_0", () => {
     let result;
 
     try {
-        new Salle(1, "Salle A", capacite);
+        new Salle("Salle A", capacite, 1);
     } catch (error) {
         result = error.message;
     }
@@ -150,7 +149,7 @@ test("capacite_-1_return_superieure_a_0", () => {
     expect(result).toBe(expected);
 });
 
-test("capacite_2.5_return_entier", () => {
+test("salle_capaciteDecimale_returnEntier", () => {
     // Arrange
     const capacite = 2.5;
     const expected = "La capacité doit être un entier";
@@ -159,7 +158,7 @@ test("capacite_2.5_return_entier", () => {
     let result;
 
     try {
-        new Salle(1, "Salle A", capacite);
+        new Salle("Salle A", capacite, 1);
     } catch (error) {
         result = error.message;
     }
@@ -168,7 +167,7 @@ test("capacite_2.5_return_entier", () => {
     expect(result).toBe(expected);
 });
 
-test("capacite_texte_return_entier", () => {
+test("salle_capaciteTexte_returnEntier", () => {
     // Arrange
     const capacite = "dix";
     const expected = "La capacité doit être un entier";
@@ -177,7 +176,7 @@ test("capacite_texte_return_entier", () => {
     let result;
 
     try {
-        new Salle(1, "Salle A", capacite);
+        new Salle("Salle A", capacite, 1);
     } catch (error) {
         result = error.message;
     }
@@ -186,7 +185,7 @@ test("capacite_texte_return_entier", () => {
     expect(result).toBe(expected);
 });
 
-test("capacite_2_return_2", () => {
+test("salle_capacite2_return2", () => {
     // Arrange
     const capacite = 2;
     const expected = 2;
@@ -195,7 +194,7 @@ test("capacite_2_return_2", () => {
     let result;
 
     try {
-        result = new Salle(1, "Salle A", capacite).capacite;
+        result = new Salle("Salle A", capacite, 1).capacite;
     } catch (error) {
         result = error.message;
     }

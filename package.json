@@ -1,8 +1,10 @@
 {
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "db": "json-server --watch backend/data/db.json --port 3000"
   },
   "devDependencies": {
-    "jest": "^30.5.2"
+    "jest": "^30.5.2",
+    "json-server": "^0.17.4"
   }
 }

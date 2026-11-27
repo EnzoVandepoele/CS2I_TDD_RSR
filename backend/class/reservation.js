@@ -30,4 +30,6 @@ class Reservation {
     }
 }
 
-module.exports = Reservation;
+if (typeof module !== "undefined") {
+    module.exports = Reservation;
+}
