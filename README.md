@@ -1,10 +1,15 @@
 # CS2I_TDD_RSR
 CS2I - TP de TDD : Système de Réservation de Salles de Réunion
 
+## Equipe
+* Enzo VANDEPOELE
+* John MICALLEF
+
 ## Variables requises :
 Salle :
 * Nom
 * Capacité max (en personne)
+Réservation :
 * Date début réu
 * Date fin réu
 * Nb personne à la réunion
@@ -28,9 +33,10 @@ npm run db
 
 # Tests
 
-**100 tests** (`npx jest`)
+**115 tests** (`npx jest`)
 
 - Un fichier par méthode : `backend/tests/<classe>/<methode>.test.js`
+- Le site a son propre fichier : `backend/tests/app/app.test.js`
 - Nom des tests : `sujet_test_resultat`
 - Les méthodes qui appellent la base (`create`, `update`, `delete`) sont testées avec un **mock de `fetch`** : les tests ne lancent jamais json-server.
 
@@ -225,3 +231,30 @@ npm run db
 | `deleteReservation_valide_returnRequeteDelete` | `DELETE /reservations/:id` |
 | `deleteReservation_reservationIntrouvable_returnIntrouvable` | Id inconnu (404) signalé |
 | `deleteReservation_apiRefuse_returnErreurSuppression` | Erreur de la base (500) signalée |
+
+
+## App — le site (`app/app.test.js`)
+
+`js/app.js` ne fait que brancher le DOM sur les classes : ces tests lui donnent une page et vérifient ce qu'il affiche.
+
+- Environnement **jsdom** (`@jest-environment jsdom`, dépendance `jest-environment-jsdom`)
+- La page testée est le **corps du vrai `index.html`** : si un `id` y disparaît, les tests le voient
+- `calendarjs` et `appelerApi` sont remplacés par de faux équivalents : **ni calendrier réel, ni json-server, ni réseau**
+
+| Test | Description |
+|---|---|
+| `initialize_donneesChargees_returnSallesDansLesListes` | Les deux listes de salles sont remplies au chargement |
+| `initialize_donneesChargees_returnStatutSucces` | Message de chargement réussi |
+| `initialize_baseInjoignable_returnAlerte` | Base éteinte : alerte et statut en erreur |
+| `renderReservationsForDate_jourReserve_returnCreneauAuFormatFrancais` | Créneau affiché en `23/11/2026 09:00 – 10:00` |
+| `renderReservationsForDate_jourReserve_returnBoutonsModifierEtAnnuler` | Chaque réservation a ses deux boutons |
+| `renderReservationsForDate_jourLibre_returnAucuneReservation` | Message affiché quand le jour est libre |
+| `renderReservationsForDate_autreSalle_returnReservationsDeCetteSalleSeulement` | La liste ne montre que la salle choisie |
+| `marquerJoursReserves_salle1_returnClasseSurLeJourReserve` | Seul le jour réservé est coloré |
+| `marquerJoursReserves_salleSansReservation_returnAucuneCaseColoree` | Salle libre : aucune case colorée |
+| `startEdit_reservation_returnFormulairePreRempli` | Bascule en modification, champs pré-remplis |
+| `stopEdit_apresModification_returnFormulaireEnCreation` | Retour en mode création |
+| `syncCapacity_salleChoisie_returnMaxEgalALaCapacite` | Le `max` du champ suit la capacité de la salle |
+| `populateRooms_aucuneSalle_returnBoutonsDesactives` | Sans salle, les actions sont désactivées |
+| `editRoomButton_clic_returnPopupPreRemplie` | La popup s'ouvre en mode modification, pré-remplie |
+| `signalerErreur_message_returnAlerte` | Les erreurs passent par une alerte |
