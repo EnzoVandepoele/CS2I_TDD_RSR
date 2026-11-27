@@ -1,5 +1,5 @@
 # CS2I_TDD_RSR
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FEnzoVandepoele%2FCS2I_TDD_RSR%2Fdevelop)](https://dashboard.stryker-mutator.io/reports/github.com/EnzoVandepoele/CS2I_TDD_RSR/develop)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FEnzoVandepoele%2FCS2I_TDD_RSR%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/EnzoVandepoele/CS2I_TDD_RSR/main)
 
 CS2I - TP de TDD : Système de Réservation de Salles de Réunion
 
