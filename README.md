@@ -1,4 +1,6 @@
 # CS2I_TDD_RSR
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FEnzoVandepoele%2FCS2I_TDD_RSR%2Fdevelop)](https://dashboard.stryker-mutator.io/reports/github.com/EnzoVandepoele/CS2I_TDD_RSR/develop)
+
 CS2I - TP de TDD : Système de Réservation de Salles de Réunion
 
 ## Equipe
@@ -30,6 +32,19 @@ Lancer la bdd :
 ```Bash
 npm run db
 ```
+
+Lancer le test de mutation (rapport : `reports/mutation/mutation.html`) :
+```Bash
+npm run test:mutation
+```
+
+# Test de mutation
+
+Stryker modifie le code des classes (`backend/class`) et vérifie que les tests détectent chaque modification (mutant).
+
+- **Score** : badge en haut du README, mis à jour par le CI à chaque push sur `develop`
+- **Détail** : onglet *Actions* de GitHub → job `mutation` → résumé du score par fichier et rapport HTML (`rapport-mutation`) à télécharger
+- **Seuil** : le CI échoue si le score passe sous **50 %**
 
 # Tests
 

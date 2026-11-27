@@ -5,7 +5,7 @@
  * (celle d'index.html), un faux calendrier et un faux accès à la base,
  * puis on vérifie ce qu'il affiche.
  *
- * @jest-environment jsdom
+ * @jest-environment @stryker-mutator/jest-runner/jest-env/jsdom
  */
 
 const fs = require("fs");
