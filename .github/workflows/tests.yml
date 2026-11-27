@@ -1,0 +1,81 @@
+name: Tests
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Lancer les tests
+        run: npm test
+
+  mutation:
+    # Ne démarre que si les tests passent
+    needs: tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Lancer le test de mutation
+        env:
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+        run: |
+          REPORTERS="clear-text,html,json"
+          # Envoie le score au tableau de bord Stryker (badge du README) seulement si la clé existe
+          if [ -n "$STRYKER_DASHBOARD_API_KEY" ]; then REPORTERS="$REPORTERS,dashboard"; fi
+          npx stryker run --reporters "$REPORTERS"
+
+      - name: Afficher le score dans le résumé du CI
+        if: always()
+        run: |
+          node <<'EOF' >> "$GITHUB_STEP_SUMMARY"
+          const fs = require("fs");
+          const fichier = "reports/mutation/mutation.json";
+          if (!fs.existsSync(fichier)) { console.log("Pas de rapport de mutation."); process.exit(0); }
+          const rapport = JSON.parse(fs.readFileSync(fichier, "utf8"));
+          console.log("## Test de mutation\n\n| Fichier | Tués | Survivants | Score |\n|---|---|---|---|");
+          let tuesTotal = 0, validesTotal = 0;
+          for (const [nom, donnees] of Object.entries(rapport.files)) {
+            const n = (s) => donnees.mutants.filter((m) => m.status === s).length;
+            const tues = n("Killed") + n("Timeout");
+            const valides = tues + n("Survived") + n("NoCoverage");
+            tuesTotal += tues; validesTotal += valides;
+            console.log(`| ${nom} | ${tues} | ${valides - tues} | ${(100 * tues / valides).toFixed(2)} % |`);
+          }
+          console.log(`| **Total** | ${tuesTotal} | ${validesTotal - tuesTotal} | **${(100 * tuesTotal / validesTotal).toFixed(2)} %** |`);
+          EOF
+
+      - name: Garder le rapport HTML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-mutation
+          path: reports/mutation/
