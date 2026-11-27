@@ -28,7 +28,7 @@ npm run db
 
 # Tests
 
-**50 tests** (`npx jest`)
+**100 tests** (`npx jest`)
 
 - Un fichier par méthode : `backend/tests/<classe>/<methode>.test.js`
 - Nom des tests : `sujet_test_resultat`
@@ -111,3 +111,117 @@ npm run db
 | `reservation_nbPersonnesDecimal_returnEntier` | `2.5` personnes refusé |
 | `reservation_nbPersonnesTexte_returnEntier` | `"cinq"` refusé |
 | `reservation_nbPersonnes5_return5` | Nombre valide conservé |
+
+## Reservation — memeId (`reservation/memeId.test.js`)
+| Test | Description |
+|---|---|
+| `memeIdReservation_nombreEtTexte_returnTrue` | `2` et `"2"` sont le même id |
+| `memeIdReservation_idsDifferents_returnFalse` | `1` et `"2"` sont différents |
+
+## Reservation — normaliserDate (`reservation/normaliserDate.test.js`)
+| Test | Description |
+|---|---|
+| `normaliserDateReservation_jourSeul_returnMinuit` | `"2026-11-25"` → `"2026-11-25T00:00"` |
+| `normaliserDateReservation_avecSecondes_returnSansSecondes` | Secondes et fuseau retirés |
+| `normaliserDateReservation_null_returnVide` | Date absente → `""` |
+
+## Reservation — jourDe (`reservation/jourDe.test.js`)
+| Test | Description |
+|---|---|
+| `jourDeReservation_dateHeure_returnJour` | `"2026-11-25T09:30"` → `"2026-11-25"` |
+
+## Reservation — jourSuivant (`reservation/jourSuivant.test.js`)
+| Test | Description |
+|---|---|
+| `jourSuivantReservation_finDeMois_returnPremierDuMoisSuivant` | 30/11 → 01/12 |
+| `jourSuivantReservation_finAnnee_returnPremierJanvier` | 31/12 → 01/01 de l'année suivante |
+
+## Reservation — aujourdhui (`reservation/aujourdhui.test.js`)
+| Test | Description |
+|---|---|
+| `aujourdhuiReservation_horlogeFixee_returnJourLocal` | Horloge mockée : renvoie le jour local |
+
+## Reservation — formaterJour (`reservation/formaterJour.test.js`)
+| Test | Description |
+|---|---|
+| `formaterJourReservation_dateHeure_returnFormatFrancais` | → `"25/11/2026"` |
+
+## Reservation — formaterDate (`reservation/formaterDate.test.js`)
+| Test | Description |
+|---|---|
+| `formaterDateReservation_dateHeure_returnJourEtHeure` | → `"25/11/2026 09:30"` |
+
+## Reservation — formaterCreneau (`reservation/formaterCreneau.test.js`)
+| Test | Description |
+|---|---|
+| `formaterCreneauReservation_memeJour_returnHeureDeFinSeule` | → `"25/11/2026 09:00 – 10:00"` |
+| `formaterCreneauReservation_plusieursJours_returnDatesCompletes` | Les deux dates complètes |
+
+## Reservation — joursCouverts (`reservation/joursCouverts.test.js`)
+| Test | Description |
+|---|---|
+| `joursCouvertsReservation_unJour_returnCeJour` | Réunion d'un jour → 1 jour |
+| `joursCouvertsReservation_surDeuxMois_returnTousLesJours` | Du 30/11 au 02/12 → 3 jours |
+| `joursCouvertsReservation_dateManquante_returnVide` | Date absente → `[]` |
+
+## Reservation — duJour (`reservation/duJour.test.js`)
+| Test | Description |
+|---|---|
+| `duJourReservation_salleEtJour_returnReservationsQuiCouvrentLeJour` | Garde la bonne salle, y compris les réunions sur plusieurs jours |
+| `duJourReservation_jourSansReservation_returnVide` | Jour libre → `[]` |
+
+## Reservation — chevauche (`reservation/chevauche.test.js`)
+| Test | Description |
+|---|---|
+| `chevaucheReservation_creneauxCroises_returnTrue` | 9h-10h et 9h30-11h se chevauchent |
+| `chevaucheReservation_finEgaleDebut_returnFalse` | 9h-10h et 10h-11h ne se chevauchent pas (limite) |
+| `chevaucheReservation_creneauxSepares_returnFalse` | Créneaux éloignés |
+
+## Reservation — trouverConflit (`reservation/trouverConflit.test.js`)
+| Test | Description |
+|---|---|
+| `trouverConflitReservation_memeSalleMemeCreneau_returnReservation` | Renvoie la réservation en conflit |
+| `trouverConflitReservation_autreSalle_returnNull` | Même créneau mais autre salle : pas de conflit |
+| `trouverConflitReservation_reservationModifiee_returnNull` | Une réservation n'est pas en conflit avec elle-même |
+
+## Reservation — valider (`reservation/valider.test.js`)
+| Test | Description |
+|---|---|
+| `validerReservation_sansSalle_returnChoisirSalle` | Pas de salle choisie |
+| `validerReservation_nbPersonnes0_returnMessageSuperieurA0` | Règle du constructeur : renvoie le message (ne lève pas) |
+| `validerReservation_depasseCapacite_returnMaximum` | 11 personnes pour 10 places refusé |
+| `validerReservation_egaleCapacite_returnNull` | 10 personnes pour 10 places accepté (limite) |
+| `validerReservation_conflit_returnDejaReservee` | Créneau déjà pris |
+| `validerReservation_modificationDeSoiMeme_returnNull` | Modifier sa propre réservation n'est pas un conflit |
+
+## Reservation — create (`reservation/create.test.js`)
+| Test | Description |
+|---|---|
+| `createReservation_nbPersonnes0_returnAucunAppelBase` | Données invalides refusées **avant** d'appeler la base |
+| `createReservation_salleIntrouvable_returnIntrouvable` | Salle absente de la base (404) |
+| `createReservation_depasseCapacite_returnRefusSansPost` | Capacité vérifiée avec la salle **de la base**, pas de POST |
+| `createReservation_conflit_returnRefusSansPost` | Conflit vérifié avec les réservations **de la base**, pas de POST |
+| `createReservation_valide_returnReservationAvecId` | Renvoie la réservation avec l'id donné par la base |
+| `createReservation_valide_returnRequetePost` | `POST /reservations`, idSalle en nombre, dates normalisées |
+| `createReservation_apiRefuse_returnErreurCreation` | Erreur de la base (500) signalée |
+| `createReservation_baseInjoignable_returnImpossibleContacter` | Serveur éteint signalé |
+
+## Reservation — update (`reservation/update.test.js`)
+| Test | Description |
+|---|---|
+| `updateReservation_idNull_returnAucunAppelBase` | Id vide refusé, aucun appel à la base |
+| `updateReservation_nbPersonnes0_returnAucunAppelBase` | Données invalides refusées **avant** d'appeler la base |
+| `updateReservation_conflitAvecAutre_returnRefusSansPatch` | Conflit avec une autre réservation, pas de PATCH |
+| `updateReservation_chevaucheSonAncienCreneau_returnReservationModifiee` | Prolonger sa réservation n'est pas un conflit |
+| `updateReservation_valide_returnRequetePatch` | `PATCH /reservations/:id` |
+| `updateReservation_reservationIntrouvable_returnIntrouvable` | Id inconnu (404) signalé |
+| `updateReservation_apiRefuse_returnErreurModification` | Erreur de la base (500) signalée |
+
+## Reservation — delete (`reservation/delete.test.js`)
+| Test | Description |
+|---|---|
+| `deleteReservation_idNull_returnAucunAppelBase` | Id vide refusé, aucun appel à la base |
+| `deleteReservation_valide_returnTrue` | Suppression réussie : renvoie `true` |
+| `deleteReservation_valide_returnRequeteDelete` | `DELETE /reservations/:id` |
+| `deleteReservation_reservationIntrouvable_returnIntrouvable` | Id inconnu (404) signalé |
+| `deleteReservation_apiRefuse_returnErreurSuppression` | Erreur de la base (500) signalée |
